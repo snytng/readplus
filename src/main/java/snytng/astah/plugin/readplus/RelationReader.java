@@ -9,6 +9,7 @@ import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IGeneralization;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IRealization;
+import com.change_vision.jude.api.inf.model.IUsage;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 
 public class RelationReader {
@@ -25,6 +26,7 @@ public class RelationReader {
 
 		return
 				(e instanceof IAssociation) ||
+				(e instanceof IUsage)       ||
 				(e instanceof IDependency)  ||
 				(e instanceof IRealization) ||
 				(e instanceof IGeneralization);
@@ -40,6 +42,11 @@ public class RelationReader {
 		if(e instanceof IAssociation){
 			IAssociation ia = (IAssociation)e;
 			return printAssotication(ia);
+		}
+		// 利用
+		else if(e instanceof IUsage){
+			IUsage id = (IUsage)e;
+			return printUsage(id);
 		}
 		// 依存
 		else if(e instanceof IDependency){
@@ -60,6 +67,13 @@ public class RelationReader {
 		else {
 			return null;
 		}
+	}
+
+	public static String printUsage(IUsage iu) {
+		INamedElement client = iu.getClient();
+		INamedElement supplier = iu.getSupplier();
+		//return String.format("○「%s」は、「%s」を使う。", client, supplier);
+		return String.format("[%s] uses [%s].", client, supplier);
 	}
 
 	public static String printDependency(IDependency id) {
