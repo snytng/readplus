@@ -63,7 +63,11 @@ ListSelectionListener
 	 */
 	private static final ResourceBundle VIEW_BUNDLE = ResourceBundle.getBundle(VIEW_PROPERTIES, Locale.getDefault());
 	public static final String getViewString(String key) {
-		return VIEW_BUNDLE.getString(key);
+		if (VIEW_BUNDLE.containsKey(key)) {
+			return VIEW_BUNDLE.getString(key);
+		} else {
+			return String.format("<%s>", key);
+		}
 	}
 
 	private String title = "<Read Diagrams>";
@@ -128,13 +132,14 @@ ListSelectionListener
 		return scrollPane;
 	}
 
-	JLabel optionLabel = new JLabel("オプション");
-	JLabel readTargetLabel = new JLabel("読み上げ対象：");
-	JToggleButton readTaregetButton = new JToggleButton("図");
-	JLabel operationLabel = new JLabel("読み上げ行を選択した時の操作：");
-	String[] comboData = new String[]{"選択 ＆ 中心移動", "選択", "何もしない"};
+	JLabel optionLabel = new JLabel(View.getViewString("View.optionLabel"));
+	JLabel readTargetLabel = new JLabel(View.getViewString("View.readTargetLabel"));
+	String[] readTargetButtonNames = View.getViewString("View.readTaregetButton").split(",");
+	JToggleButton readTaregetButton = new JToggleButton(readTargetButtonNames[0]);
+	JLabel operationLabel = new JLabel(View.getViewString("View.operationLabel"));
+	String[] comboData = View.getViewString("View.comboData").split(",");
 	JComboBox<String> operationComboBox = new JComboBox<>(comboData);
-	JLabel zoomLabel = new JLabel("ズーム:");
+	JLabel zoomLabel = new JLabel(View.getViewString("View.zoomLabel"));
 	JSlider zoomSlider = new JSlider(10, 100);
 
 	private JPanel createOperationPanel() {
@@ -204,10 +209,10 @@ ListSelectionListener
 			IDiagram diagram = diagramViewManager.getCurrentDiagram();
 
 			if(readTaregetButton.isSelected()){
-				readTaregetButton.setText("プロジェクト");
+				readTaregetButton.setText(readTargetButtonNames[1]);
 				diagram = null;
 			} else {
-				readTaregetButton.setText("図");
+				readTaregetButton.setText(readTargetButtonNames[0]);
 			}
 
 			// メッセージとプレゼンテーションをリセット
