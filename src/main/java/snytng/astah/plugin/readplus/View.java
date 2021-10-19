@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.model.IActivityDiagram;
+import com.change_vision.jude.api.inf.model.IBlockDefinitionDiagram;
 import com.change_vision.jude.api.inf.model.IClassDiagram;
 import com.change_vision.jude.api.inf.model.ICommunicationDiagram;
 import com.change_vision.jude.api.inf.model.IDataFlowDiagram;
@@ -247,6 +248,10 @@ ListSelectionListener
 			// 選択している図がユースケース図ならば、プロセスを読み上げ
 			else if(diagram instanceof IUseCaseDiagram){
 				messagePresentation = UseCaseDiagramReader.getMessagePresentation((IUseCaseDiagram)diagram, diagramViewManager);
+			}
+			// 選択している図がユースケース図ならば、プロセスを読み上げ
+			else if(diagram instanceof IBlockDefinitionDiagram){
+				messagePresentation = BlockDefinitionDiagramReader.getMessagePresentation((IBlockDefinitionDiagram)diagram, diagramViewManager);
 			}
 			// それ以外はプロジェクトに含まれるクラス数を表示する
 			else {

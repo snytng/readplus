@@ -12,9 +12,9 @@ import com.change_vision.jude.api.inf.model.IRealization;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 
 public class RelationReader {
-	
+
 	private RelationReader(){}
-	
+
 	/**
 	 * 読み上げをサポートされている関連かどうかを返却する
 	 * @param e モデル要素
@@ -22,14 +22,14 @@ public class RelationReader {
 	 */
 	public static boolean isSupportedRelation(IElement e){
 		if(e == null) return false;
-		
-		return 
+
+		return
 				(e instanceof IAssociation) ||
 				(e instanceof IDependency)  ||
 				(e instanceof IRealization) ||
 				(e instanceof IGeneralization);
 	}
-	
+
 	/**
 	 * 関連を読み上げる
 	 * @param e モデル要素
@@ -44,13 +44,13 @@ public class RelationReader {
 		// 依存
 		else if(e instanceof IDependency){
 			IDependency id = (IDependency)e;
-			return printDependency(id); 
+			return printDependency(id);
 		}
 		// 継承
 		else if(e instanceof IGeneralization){
 			IGeneralization ig = (IGeneralization)e;
-			return printGeneralization(ig); 
-		} 
+			return printGeneralization(ig);
+		}
 		// 実現
 		else if(e instanceof IRealization){
 			IRealization ir = (IRealization)e;
@@ -61,29 +61,32 @@ public class RelationReader {
 			return null;
 		}
 	}
-	
+
 	public static String printDependency(IDependency id) {
 		INamedElement client = id.getClient();
 		INamedElement supplier = id.getSupplier();
-		return String.format("○「%s」は、「%s」を使う。", client, supplier);
+		//return String.format("○「%s」は、「%s」を使う。", client, supplier);
+		return String.format("[%s] uses [%s].", client, supplier);
 	}
 
 	public static String printGeneralization(IGeneralization ig) {
 		IClass sub = ig.getSubType();
 		IClass sup = ig.getSuperType();
-		return String.format("○「%s」は、「%s」の一種である。", sub, sup);
+		//return String.format("○「%s」は、「%s」の一種である。", sub, sup);
+		return String.format("[%s] is a kind of [%s].", sub, sup);
 	}
 
 	public static String printRealization(IRealization iRealization) {
 		INamedElement client = iRealization.getClient();
 		INamedElement supplier = iRealization.getSupplier();
-		return String.format("○「%s」は、「%s」の実現である。", client, supplier);
+		//return String.format("○「%s」は、「%s」の実現である。", client, supplier);
+		return String.format("[%s] realizes [%s].", client, supplier);
 	}
-	
+
 	public static String printAssotication(IAssociation iAssociation) {
 		String ox = "";
 
-		// 関連名の読み方の方向＝▲の方向  
+		// 関連名の読み方の方向＝▲の方向
 		// IPresentationのname_direction_reverseが0なら関連の方向と同じ、1ながら関連の方向と反対
 		boolean direction = true;
 		try {
@@ -102,36 +105,42 @@ public class RelationReader {
 
 		// 関連名がない場合
 		if(verb.isEmpty()){
-			ox = "×";
-			// 集約 
+			//ox = "×";
+			ox = "";
+			// 集約
 			if (iAttributes[0].isAggregate() || iAttributes[0].isComposite()) {
 				fromAttribute = iAttributes[1];
 				toAttribute = iAttributes[0];
-				ox = "○";
-				verb = "の一部である";
+				//ox = "○";
+				//verb = "の一部である";
+				ox = "";
+				verb = "is a part of";
 
-			} 
+			}
 			// 集約
 			else if(iAttributes[1].isAggregate() || iAttributes[1].isComposite()){
 				fromAttribute = iAttributes[0];
 				toAttribute = iAttributes[1];
-				ox = "○";
-				verb = "の一部である";
+				//ox = "○";
+				//verb = "の一部である";
+				ox = "";
+				verb = "is a part of";
 			}
 		}
 		// 関連名がある場合
 		else {
-			ox = "○";
+			//ox = "○";
+			ox = "";
 			// 順方向
 			if(direction){
 				fromAttribute = iAttributes[0];
 				toAttribute = iAttributes[1];
-			} 
+			}
 			// 逆方向
 			else {
-				fromAttribute = iAttributes[1];				
+				fromAttribute = iAttributes[1];
 				toAttribute = iAttributes[0];
-			}			
+			}
 		}
 
 		// fromとtoのクラスを決める
@@ -153,6 +162,7 @@ public class RelationReader {
 		}
 
 		// 読み上げ文章を作成
-		return String.format("%s「%s」は、「%s」%s。", ox, fromName, toName, verb);
+		//return String.format("%s「%s」は、「%s」%s。", ox, fromName, toName, verb);
+		return String.format("%1$s [%2$s] %4$s [%3$s].", ox, fromName, toName, verb);
 	}
 }
