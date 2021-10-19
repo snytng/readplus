@@ -73,7 +73,7 @@ public class RelationReader {
 		IClass sub = ig.getSubType();
 		IClass sup = ig.getSuperType();
 		//return String.format("○「%s」は、「%s」の一種である。", sub, sup);
-		return String.format("[%s] is a kind of [%s].", sub, sup);
+		return String.format("[%s] is a type of [%s].", sub, sup);
 	}
 
 	public static String printRealization(IRealization iRealization) {
