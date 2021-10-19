@@ -5,12 +5,12 @@
 		<bundle.symbolicName>snytng.astah.plugin.readplus</bundle.symbolicName>
 		<bundle.namespace>snytng.astah.plugin.readplus</bundle.namespace>
 		<plugin.install>true</plugin.install>
-		<astah.version>8.2</astah.version>
-		<astah.edition>pro,uml</astah.edition>
+		<astah.version>1.1</astah.version>
+		<astah.edition>sysml</astah.edition>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>readplus</artifactId>
-	<version>1.4.3</version>
+	<version>1.4.3.sysml</version>
 	<packaging>bundle</packaging>
 	<pluginRepositories>
 		<pluginRepository>
