@@ -65,9 +65,9 @@ public class SequenceDiagramReader {
 			if(m.getSource() instanceof ILifeline){
 				s = (ILifeline)m.getSource();
 				if(s.getBase() != null){
-					source = "「" + s.getName() + ":" + s.getBase().getName() + "」";
+					source = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithClass"), s.getName(), s.getBase().getName());
 				} else {
-					source = "「" + s.getName() + ":" + "」";						
+					source = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithoutClass"), s.getName());
 				}
 			}
 
@@ -88,15 +88,15 @@ public class SequenceDiagramReader {
 
 			// メッセージパラメーター
 			String messageParameters = "(";
-			
+
 			// メッセージの引数があればそちらを優先し、なければ関数の引数を利用(astah*仕様)
 			if(! m.getArgument().equals("")){
 				messageParameters += m.getArgument();
-			} 
+			}
 			else
 				if(m.getOperation() != null){
 					IParameter[] params = m.getOperation().getParameters();
-					String paramstrings = 
+					String paramstrings =
 							Arrays.stream(params)
 							.map(IParameter::getName)
 							.collect(Collectors.joining(", "));
@@ -106,14 +106,14 @@ public class SequenceDiagramReader {
 
 			// クラスに定義されたOperationになっているかどうかを表示
 			IOperation operation = m.getOperation();
-			String ox = operation != null ? "○" : "×"; 
+			String ox = operation != null ? "○" : "×";
 
 			// メッセージを読み上げ
 			message += indent + index + ": " + source + "は、" + target + "を(から)" + messageName + messageParameters + " " + ox;
 
 		}
 
-		return message;		
+		return message;
 	}
 
 	private IPresentation[] sort(IPresentation[] presentations){
@@ -194,7 +194,7 @@ public class SequenceDiagramReader {
 
 		// ライフライン数を表示する
 		mps.add("[" + diagram.getName() + "]シーケンス図には、" +
-				sdr.getNumberOfLifelines() + "個のライフラインと、" + 
+				sdr.getNumberOfLifelines() + "個のライフラインと、" +
 				sdr.getNumberOfMessages() + "個のメッセージがあります",
 				null);
 
@@ -218,8 +218,8 @@ public class SequenceDiagramReader {
 			}
 
 		}
-		else 
-		{	
+		else
+		{
 			// 全てのコミュニケーション手順を表示する
 
 			// Presentationをソート

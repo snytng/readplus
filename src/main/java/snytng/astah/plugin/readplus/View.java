@@ -62,6 +62,9 @@ ListSelectionListener
 	 * リソースバンドル
 	 */
 	private static final ResourceBundle VIEW_BUNDLE = ResourceBundle.getBundle(VIEW_PROPERTIES, Locale.getDefault());
+	public static final String getViewString(String key) {
+		return VIEW_BUNDLE.getString(key);
+	}
 
 	private String title = "<Read Diagrams>";
 	private String description = "<This plugin reads diagrams in the project.>";
@@ -337,13 +340,13 @@ ListSelectionListener
 
 
 	private void setPresentationView(IPresentation p, Color c){
-		try {
+		//try {
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.BACKGROUND_COLOR, c);
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.BORDER_COLOR, c);
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.LINE_COLOR, c);
-		} catch(InvalidUsingException e){
-			e.printStackTrace();
-		}
+		//} catch(InvalidUsingException e){
+		//	e.printStackTrace();
+		//}
 	}
 
 	@Override
