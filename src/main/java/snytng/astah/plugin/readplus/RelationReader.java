@@ -163,6 +163,6 @@ public class RelationReader {
 
 		// 読み上げ文章を作成
 		//return String.format("%s「%s」は、「%s」%s。", ox, fromName, toName, verb);
-		return String.format("%1$s [%2$s] %4$s [%3$s].", ox, fromName, toName, verb);
+		return String.format("%1$s[%2$s] %4$s [%3$s].", ox, fromName, toName, verb);
 	}
 }
