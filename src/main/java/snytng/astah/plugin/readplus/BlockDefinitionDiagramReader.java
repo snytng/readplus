@@ -5,8 +5,8 @@ import java.util.List;
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IBlock;
 import com.change_vision.jude.api.inf.model.IBlockDefinitionDiagram;
-import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IModel;
@@ -36,7 +36,7 @@ public class BlockDefinitionDiagramReader {
 
 		try {
 			for(IPresentation p : diagram.getPresentations()){
-				if(p.getModel() instanceof IClass){
+				if(p.getModel() instanceof IBlock){
 					noc++;
 				}
 			}
@@ -57,8 +57,10 @@ public class BlockDefinitionDiagramReader {
 		MessagePresentation mps = new MessagePresentation();
 
 		//パッケージ名を表示
-		//mps.add("##### [パッケージ名: " + iPackage.getFullName(".")+"]", null);
-		mps.add("##### [Package name: " + iPackage.getFullName(".")+"]", null);
+		mps.add(String.format(
+				View.getViewString("BlockDefinitionDiagramReader.packageName.meessage"),
+				iPackage.getFullName(".")),
+				null);
 
 		// パッケージのダイアグラムを表示
 		IDiagram[] iDiagrams = iPackage.getDiagrams();
@@ -91,11 +93,15 @@ public class BlockDefinitionDiagramReader {
 
 		// ブロック数の表示
 		int noc = cdr.getNumberOfBlocks();
-		//mps.add("[" + diagram.getName() + "]ブロック定義図には、「" + noc + "個」のブロックがあります", null);
-		mps.add("[" + diagram.getName() + "] Block Definition Diagram has " + noc + " block(s).", null);
+		mps.add(String.format(
+				View.getViewString("BlockDefinitionDiagramReader.numberOfBlocks.meessage"),
+				diagram.getName(), noc),
+				null);
 		if(noc >= LIMIT_NUMBER_OF_BLOCKS){
-			//mps.add("※警告: ブロック数が" + LIMIT_NUMBER_OF_BLOCKS + "以上です", null);
-			mps.add("*warning: block number is greater than the limit number of blocks: " + LIMIT_NUMBER_OF_BLOCKS + ".", null);
+			mps.add(String.format(
+					View.getViewString("BlockDefinitionDiagramReader.warningNumberOfBlocks.meessage"),
+					LIMIT_NUMBER_OF_BLOCKS),
+					null);
 		}
 
 		mps.add("=====", null);
@@ -103,27 +109,26 @@ public class BlockDefinitionDiagramReader {
 		// 選択要素の表示
 		IPresentation[] ps = dvm.getSelectedPresentations();
 		if(ps.length > 0){
-			//mps.add("[" + diagram.getName() + "]ブロック定義図で、" + ps.length + "個の要素が選択されています", null);
-			mps.add("There is(are) " + ps.length + " selected block(s).", null);
+			mps.add(String.format(
+					View.getViewString("BlockDefinitionDiagramReader.selection.meessage"),
+					ps.length),
+					null);
 
 			for(IPresentation p : ps){
-				// クラス
-				if(p.getModel() instanceof IClass) {
-					IClass c = (IClass)p.getModel();
-					//mps.add("ブロック：" + ClassReader.printName(c), p);
-					//mps.add("    属性：" + ClassReader.printAttributes(c), p);
-					mps.add("Block:        " + ClassReader.printName(c), p);
-					mps.add("    Attribute:" + ClassReader.printAttributes(c), p);
+				// ブロック
+				if(p.getModel() instanceof IBlock) {
+					IBlock b = (IBlock)p.getModel();
+					mps.add(View.getViewString("BlockDefinitionDiagramReader.block.header") + BlockReader.printAttributes(b), p);
+					mps.add(View.getViewString("BlockDefinitionDiagramReader.block.attributes.header") + BlockReader.printAttributes(b), p);
 					// クラスに繋がる関連を読み上げ
-					List<IElement> elements = ClassReader.getRelations(c);
+					List<IElement> elements = BlockReader.getRelations(b);
 					try {
 						for(IPresentation dp : diagram.getPresentations()){
 							IElement e = dp.getModel();
 							if(elements.contains(e)){
 								String r = RelationReader.printRelation(e);
 								if(r != null){
-									//mps.add("    関連：" + r, dp);
-									mps.add("    Realation:" + r, dp);
+									mps.add(View.getViewString("BlockDefinitionDiagramReader.block.relations.header") + r, dp);
 								}
 							}
 						}
@@ -135,8 +140,7 @@ public class BlockDefinitionDiagramReader {
 				else if(RelationReader.isSupportedRelation(p.getModel())) {
 					String r = RelationReader.printRelation(p.getModel());
 					if(r != null){
-						//mps.add("関連：" + r, p);
-						mps.add("Realation:" + r, p);
+						mps.add(View.getViewString("BlockDefinitionDiagramReader.relation.header") + r, p);
 					}
 				}
 				// それ以外

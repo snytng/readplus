@@ -70,34 +70,39 @@ public class RelationReader {
 	}
 
 	public static String printUsage(IUsage iu) {
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
+		String ox = oxData[0];
 		INamedElement client = iu.getClient();
 		INamedElement supplier = iu.getSupplier();
-		//return String.format("○「%s」は、「%s」を使う。", client, supplier);
-		return String.format("[%s] uses [%s].", client, supplier);
+		return String.format(View.getViewString("RelationReader.usage.meesage"), ox, client, supplier);
 	}
 
 	public static String printDependency(IDependency id) {
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
+		String ox = oxData[0];
 		INamedElement client = id.getClient();
 		INamedElement supplier = id.getSupplier();
-		//return String.format("○「%s」は、「%s」を使う。", client, supplier);
-		return String.format("[%s] uses [%s].", client, supplier);
+		return String.format(View.getViewString("RelationReader.dependency.meesage"), ox, client, supplier);
 	}
 
 	public static String printGeneralization(IGeneralization ig) {
-		IClass sub = ig.getSubType();
-		IClass sup = ig.getSuperType();
-		//return String.format("○「%s」は、「%s」の一種である。", sub, sup);
-		return String.format("[%s] is a type of [%s].", sub, sup);
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
+		String ox = oxData[0];
+		IClass subType = ig.getSubType();
+		IClass superType = ig.getSuperType();
+		return String.format(View.getViewString("RelationReader.generalization.meesage"), ox, subType, superType);
 	}
 
 	public static String printRealization(IRealization iRealization) {
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
+		String ox = oxData[0];
 		INamedElement client = iRealization.getClient();
 		INamedElement supplier = iRealization.getSupplier();
-		//return String.format("○「%s」は、「%s」の実現である。", client, supplier);
-		return String.format("[%s] realizes [%s].", client, supplier);
+		return String.format(View.getViewString("RelationReader.realization.meesage"), ox, client, supplier);
 	}
 
 	public static String printAssotication(IAssociation iAssociation) {
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
 		String ox = "";
 
 		// 関連名の読み方の方向＝▲の方向
@@ -119,32 +124,26 @@ public class RelationReader {
 
 		// 関連名がない場合
 		if(verb.isEmpty()){
-			//ox = "×";
-			ox = "";
+			ox = oxData[1];
 			// 集約
 			if (iAttributes[0].isAggregate() || iAttributes[0].isComposite()) {
 				fromAttribute = iAttributes[1];
 				toAttribute = iAttributes[0];
-				//ox = "○";
-				//verb = "の一部である";
-				ox = "";
-				verb = "is a part of";
+				ox = oxData[0];
+				verb = View.getViewString("RelationReader.association.aggregate.verb");
 
 			}
 			// 集約
 			else if(iAttributes[1].isAggregate() || iAttributes[1].isComposite()){
 				fromAttribute = iAttributes[0];
 				toAttribute = iAttributes[1];
-				//ox = "○";
-				//verb = "の一部である";
-				ox = "";
-				verb = "is a part of";
+				ox = oxData[0];
+				verb = View.getViewString("RelationReader.association.aggregate.verb");
 			}
 		}
 		// 関連名がある場合
 		else {
-			//ox = "○";
-			ox = "";
+			ox = oxData[0];
 			// 順方向
 			if(direction){
 				fromAttribute = iAttributes[0];
@@ -176,7 +175,8 @@ public class RelationReader {
 		}
 
 		// 読み上げ文章を作成
-		//return String.format("%s「%s」は、「%s」%s。", ox, fromName, toName, verb);
-		return String.format("%1$s[%2$s] %4$s [%3$s].", ox, fromName, toName, verb);
+		return String.format(
+				View.getViewString("RelationReader.association.meesage"),
+				ox, fromName, toName, verb);
 	}
 }
