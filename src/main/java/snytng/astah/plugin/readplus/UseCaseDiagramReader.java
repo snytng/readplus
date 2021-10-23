@@ -64,7 +64,7 @@ public class UseCaseDiagramReader {
 		// <<include>>を読み上げ
 		else if(p.getModel() instanceof IInclude){
 			IInclude in = (IInclude)p.getModel();
-			message = readInclude(in);		
+			message = readInclude(in);
 		}
 		// <<extend>>を読み上げ
 		else if(p.getModel() instanceof IExtend){
@@ -84,9 +84,15 @@ public class UseCaseDiagramReader {
 		String message = null;
 		IAttribute[] ats = as.getMemberEnds();
 		if(ats[0].getType() instanceof IUseCase){
-			message = ats[1].getType().getName() + "は、" + ats[0].getType().getName();				
+			message = String.format(
+					View.getViewString("UsecaseDiagramReader.association.meessage"),
+					ats[1].getType().getName(), ats[0].getType().getName()
+					);
 		} else if(ats[1].getType() instanceof IUseCase){
-			message = ats[0].getType().getName() + "は、" + ats[1].getType().getName();
+			message = String.format(
+					View.getViewString("UsecaseDiagramReader.association.meessage"),
+					ats[0].getType().getName(), ats[1].getType().getName()
+					);
 		}
 		return message;
 	}
@@ -95,7 +101,10 @@ public class UseCaseDiagramReader {
 		String message = null;
 		StringBuilder actors = new StringBuilder();
 		getActors(in.getIncludingCase(), new HashSet<>(), actors);
-		message = actors + "は、" + in.getIncludingCase().getName() + " ときには、必ず " + in.getAddition().getName();
+		message = String.format(
+				View.getViewString("UsecaseDiagramReader.include.meessage"),
+				actors, in.getIncludingCase().getName(), in.getAddition().getName()
+				);
 		return message;
 	}
 
@@ -103,7 +112,10 @@ public class UseCaseDiagramReader {
 		String message = null;
 		StringBuilder actors = new StringBuilder();
 		getActors(ex.getExtendedCase(), new HashSet<>(), actors);
-		message = actors + "は、" + ex.getExtendedCase().getName() + "ときには 、" + ex.getExtension().getName() + "ときもある";
+		message = String.format(
+				View.getViewString("UsecaseDiagramReader.extend.meessage"),
+				actors, ex.getExtendedCase().getName(), ex.getExtension().getName()
+				);
 		return message;
 	}
 
@@ -162,7 +174,7 @@ public class UseCaseDiagramReader {
 
 					} catch (InvalidUsingException e) {
 						e.printStackTrace();
-					}						
+					}
 				}
 			}
 
@@ -181,8 +193,10 @@ public class UseCaseDiagramReader {
 		UseCaseDiagramReader ucdr = new UseCaseDiagramReader(diagram);
 
 		// ユースケース図のプロセス数を表示する
-		mps.add("[" + diagram.getName() + "]ユースケース図には、" + 
-				ucdr.getUseCases() + "個のユースケースがあります",
+		mps.add(String.format(
+				View.getViewString("UsecaseDiagramReader.numberOfUsecasees.meessage"),
+				diagram.getName(), ucdr.getUseCases()
+				),
 				null);
 
 		mps.add("=====", null);
@@ -191,7 +205,10 @@ public class UseCaseDiagramReader {
 
 		// 選択要素を表示する
 		if(ps.length > 0){
-			mps.add("[" + diagram.getName() + "]ユースケース図で、" + ps.length + "個の要素が選択されています", null);
+			mps.add(String.format(
+					View.getViewString("UsecaseDiagramReader.selection.meessage"),
+					ps.length),
+					null);
 
 			for(IPresentation p : ucdr.supportedPresentation(ps)){
 				String m = ucdr.read(p);
@@ -255,21 +272,21 @@ public class UseCaseDiagramReader {
 
 		}
 		// 全ての要素をを表示する
-		else 
-		{	
+		else
+		{
 			try {
 				ps = diagram.getPresentations();
 
 				for(IPresentation p : ucdr.supportedPresentation(ps)){
 					String m = ucdr.read(p);
 					if(m != null && ! m.isEmpty()){
-						mps.add(m, p);	
+						mps.add(m, p);
 					}
 				}
 				for(IPresentation p : ucdr.unsupportedPresentation(ps)){
 					String m = ucdr.read(p);
 					if(m != null && ! m.isEmpty()){
-						mps.add(m, p);	
+						mps.add(m, p);
 					}
 				}
 
