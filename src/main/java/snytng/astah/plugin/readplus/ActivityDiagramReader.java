@@ -35,20 +35,28 @@ public class ActivityDiagramReader {
 
 	public static MessagePresentation getMessagePresentation(IActivityDiagram diagram, IDiagramViewManager dvm) {
 		MessagePresentation mps = new MessagePresentation();
-	
+
 		ActivityDiagramReader adr = new ActivityDiagramReader(diagram);
-	
+
 		// アクティビティ図のノード数を表示する
-		mps.add("[" + diagram.getName() + "]アクティビティ図には、" + adr.getActivityNodes() + "個のノードがあります", null);
-	
+		mps.add(String.format(
+				View.getViewString("ActivityDiagramReader.numberOfNodes.meessage"),
+				diagram.getName(), adr.getActivityNodes()
+				),
+				null);
+
 		mps.add("=====", null);
 
 		// 選択要素の表示
 		IPresentation[] ps = dvm.getSelectedPresentations();
 		if(ps.length > 0){
-			mps.add("[" + diagram.getName() + "]アクティビティ図で、" + ps.length + "個の要素が選択されています", null);
+			mps.add(String.format(
+					View.getViewString("ActivityDiagramReader.selection.meessage"),
+					ps.length
+					),
+					null);
 		}
-		
+
 		return mps;
 	}
 
