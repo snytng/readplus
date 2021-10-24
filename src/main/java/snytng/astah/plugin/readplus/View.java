@@ -5,7 +5,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.io.FileInputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.Box;
@@ -68,14 +72,28 @@ ListSelectionListener
 	private static final ResourceBundle VIEW_BUNDLE = ResourceBundle.getBundle(VIEW_PROPERTIES, Locale.getDefault());
 	private static final ResourceBundle VIEW_UML_BUNDLE = ResourceBundle.getBundle(VIEW_UML_PROPERTIES, Locale.getDefault());
 	private static final ResourceBundle VIEW_SYSML_BUNDLE = ResourceBundle.getBundle(VIEW_SYSML_PROPERTIES, Locale.getDefault());
+	private static Properties props = new Properties();
+
+	static {
+		try {
+			Path file = Paths.get(System.getProperty("user.home"), "readplus.view.properties");
+			props.load(new FileInputStream(file.toFile()));;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static final String getViewString(String key) {
-		if (VIEW_BUNDLE.containsKey(key)) {
+		if (props.containsKey(key)) {
+			return (String)props.get(key);
+
+		} else if (VIEW_BUNDLE.containsKey(key)) {
 			return VIEW_BUNDLE.getString(key);
 		} else if (VIEW_UML_BUNDLE.containsKey(key)) {
 			return VIEW_UML_BUNDLE.getString(key);
 		} else if (VIEW_SYSML_BUNDLE.containsKey(key)) {
 			return VIEW_SYSML_BUNDLE.getString(key);
+
 		} else {
 			return String.format("<%s>", key);
 		}
