@@ -1,5 +1,8 @@
 package snytng.astah.plugin.readplus;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.model.IAssociation;
 import com.change_vision.jude.api.inf.model.IAttribute;
@@ -83,7 +86,32 @@ public class RelationReader {
 		String ox = oxData[0];
 		INamedElement client = id.getClient();
 		INamedElement supplier = id.getSupplier();
-		return String.format(View.getViewString("RelationReader.dependency.meesage"), ox, client, supplier);
+
+		List<String> stereotypes = Arrays.asList(id.getStereotypes());
+		if (stereotypes.contains("allocate")) {
+			return String.format(View.getViewString("RelationReader.dependency.allocate.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("verify")) {
+			return String.format(View.getViewString("RelationReader.dependency.verify.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("deriveReqt")) {
+			return String.format(View.getViewString("RelationReader.dependency.deriveReqt.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("copy")) {
+			return String.format(View.getViewString("RelationReader.dependency.copy.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("satisfy")) {
+			return String.format(View.getViewString("RelationReader.dependency.satisfy.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("refine")) {
+			return String.format(View.getViewString("RelationReader.dependency.refine.meesage"), ox, client, supplier);
+
+		} else if (stereotypes.contains("trace")) {
+			return String.format(View.getViewString("RelationReader.dependency.trace.meesage"), ox, client, supplier);
+
+		} else {
+			return String.format(View.getViewString("RelationReader.dependency.meesage"), ox, client, supplier);
+		}
 	}
 
 	public static String printGeneralization(IGeneralization ig) {
