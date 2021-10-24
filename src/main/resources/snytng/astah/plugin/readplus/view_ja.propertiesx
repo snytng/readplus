@@ -51,3 +51,10 @@ UsecaseDiagramReader.extend.meessage=%1$s\u306f\u3001%2$s\u3068\u304d\u306b\u306
 
 ActivityDiagramReader.numberOfNodes.meessage=[%s]\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3\u56f3\u306b\u306f\u3001\u300c%d\u500b\u300d\u306e\u30ce\u30fc\u30c9\u304c\u3042\u308a\u307e\u3059
 ActivityDiagramReader.selection.meessage=%d \u500b\u306e\u8981\u7d20\u304c\u9078\u629e\u3055\u308c\u3066\u3044\u307e\u3059
+
+StateMachineDiagramReader.numberOfStatesAndTransitions.meessage=[%s]\u30b9\u30c6\u30fc\u30c8\u30de\u30b7\u30f3\u56f3\u306b\u306f\u3001\u300c%d\u500b\u300d\u306e\u72b6\u614b\u3068\u300c%d\u500b\u300d\u306e\u9077\u79fb\u304c\u3042\u308a\u307e\u3059
+StateMachineDiagramReader.selection.meessage=%d \u500b\u306e\u8981\u7d20\u304c\u9078\u629e\u3055\u308c\u3066\u3044\u307e\u3059
+StateMachineDiagramReader.state.message=\u72b6\u614b\uff1a\u300c%s\u300d
+StateMachineDiagramReader.state.action.message=\ \ \ \ \u30a2\u30af\u30b7\u30e7\u30f3\uff1a%s
+StateMachineDiagramReader.state.transition.message=\ \ \ \ \u9077\u79fb\uff1a%s
+StateMachineDiagramReader.transition.message=\u9077\u79fb\uff1a%s

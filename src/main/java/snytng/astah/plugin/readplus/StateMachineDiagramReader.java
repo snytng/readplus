@@ -43,9 +43,10 @@ public class StateMachineDiagramReader {
 		StateMachineDiagramReader smdr = new StateMachineDiagramReader(diagram);
 
 		// ステート数を表示する
-		mps.add("[" + diagram.getName() + "]状態マシン図には、" +
-				smdr.getNumberOfStates() + "個のステートと" +
-				smdr.getNumberOfTransitions() + "個の遷移があります",
+		mps.add(String.format(
+				View.getViewString("StateMachineDiagramReader.numberOfStatesAndTransitions.meessage"),
+				diagram.getName(), smdr.getNumberOfStates(),smdr.getNumberOfTransitions()
+				),
 				null);
 
 		mps.add("=====", null);
@@ -53,7 +54,11 @@ public class StateMachineDiagramReader {
 		// 選択要素の表示
 		IPresentation[] presentation = dvm.getSelectedPresentations();
 		if(presentation.length > 0){
-			mps.add("[" + diagram.getName() + "]状態マシン図で、" + presentation.length + "個の要素が選択されています", null);
+			mps.add(String.format(
+					View.getViewString("StateMachineDiagramReader.selection.meessage"),
+					presentation.length
+					),
+					null);
 
 			for(int i = 0; i < presentation.length; i++){
 				IPresentation p = presentation[i];
@@ -61,11 +66,19 @@ public class StateMachineDiagramReader {
 				if(p.getModel() instanceof IState) {
 					IState s = (IState)p.getModel();
 					// 状態名の表示
-					mps.add("状態：「" + s.getName() + "」", p);
+					mps.add(String.format(
+							View.getViewString("StateMachineDiagramReader.state.message"),
+							s.getName()
+							),
+							p);
 
 					// 状態の内部属性を表示
 					String attr = StateReader.printActions(s);
-					mps.add("  アクション：" + attr, p);	
+					mps.add(String.format(
+							View.getViewString("StateMachineDiagramReader.state.action.message"),
+							attr
+							),
+							p);
 
 					// 状態から移る遷移を読み上げ
 					IPresentation[] dps;
@@ -75,20 +88,30 @@ public class StateMachineDiagramReader {
 						for(IPresentation dp : dps){
 							if(ts.contains(dp.getModel())){
 								String tra = TransitionReader.read((ITransition)dp.getModel());
-								mps.add("  遷移：" + tra, dp); 
+								mps.add(String.format(
+										View.getViewString("StateMachineDiagramReader.state.transition.message"),
+										tra
+										),
+										dp);
+
 							}
 						}
 					} catch (InvalidUsingException e) {
 						e.printStackTrace();
 					}
 
-				} 
+				}
 				// 遷移
 				else if (p.getModel() instanceof ITransition){
 					ITransition t = (ITransition)p.getModel();
 					String tra = TransitionReader.read(t);
 					if(! tra.equals("")){
-						mps.add("状態遷移：" + tra, p); 
+						mps.add(String.format(
+								View.getViewString("StateMachineDiagramReader.transition.message"),
+								tra
+								),
+								p);
+
 					}
 				}
 				// それ以外
@@ -96,7 +119,7 @@ public class StateMachineDiagramReader {
 					mps.add(p.getType(), p);
 				}
 			}
-		} 
+		}
 		// 選択していない場合には、状態マシン図にある遷移のみを読み上げ
 		else {
 			IPresentation[] ps;
