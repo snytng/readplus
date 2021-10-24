@@ -28,6 +28,7 @@ import com.change_vision.jude.api.inf.model.IClassDiagram;
 import com.change_vision.jude.api.inf.model.ICommunicationDiagram;
 import com.change_vision.jude.api.inf.model.IDataFlowDiagram;
 import com.change_vision.jude.api.inf.model.IDiagram;
+import com.change_vision.jude.api.inf.model.IRequirementDiagram;
 import com.change_vision.jude.api.inf.model.ISequenceDiagram;
 import com.change_vision.jude.api.inf.model.IStateMachineDiagram;
 import com.change_vision.jude.api.inf.model.IUseCaseDiagram;
@@ -249,11 +250,15 @@ ListSelectionListener
 			else if(diagram instanceof IUseCaseDiagram){
 				messagePresentation = UseCaseDiagramReader.getMessagePresentation((IUseCaseDiagram)diagram, diagramViewManager);
 			}
-			// 選択している図がユースケース図ならば、プロセスを読み上げ
+			// 選択している図がブロック定義図ならば、ブロックを読み上げ
 			else if(diagram instanceof IBlockDefinitionDiagram){
 				messagePresentation = BlockDefinitionDiagramReader.getMessagePresentation((IBlockDefinitionDiagram)diagram, diagramViewManager);
 			}
-			// それ以外はプロジェクトに含まれるクラス数を表示する
+			// 選択している図が要求図ならば、要求を読み上げ
+			else if(diagram instanceof IRequirementDiagram){
+				messagePresentation = RequirementDiagramReader.getMessagePresentation((IRequirementDiagram)diagram, diagramViewManager);
+			}
+			// それ以外はプロジェクトを読み上げる
 			else {
 				messagePresentation = AstahProjectReader.getMessagePresentation(diagramViewManager);
 			}

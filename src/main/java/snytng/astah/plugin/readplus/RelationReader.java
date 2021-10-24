@@ -10,6 +10,7 @@ import com.change_vision.jude.api.inf.model.IGeneralization;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IRealization;
 import com.change_vision.jude.api.inf.model.IUsage;
+import com.change_vision.jude.api.inf.presentation.ILinkPresentation;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 
 public class RelationReader {
@@ -178,5 +179,27 @@ public class RelationReader {
 		return String.format(
 				View.getViewString("RelationReader.association.meesage"),
 				ox, fromName, toName, verb);
+	}
+
+	public static boolean isSupportedType(String type) {
+		if (type == null) return false;
+
+		if (type.equals("Containment")){
+			return true;
+		}
+		return false;
+	}
+
+	public static String printType(IPresentation p) {
+		String[] oxData = View.getViewString("RelationReader.ox").split(",");
+		String message = "";
+
+		if (p.getType().equals("Containment")){
+			ILinkPresentation lp = (ILinkPresentation)p;
+			message = String.format(View.getViewString("RelationReader.containment.meesage"),
+					oxData[0], lp.getSource().getLabel(), lp.getTarget().getLabel());
+		}
+
+		return message;
 	}
 }
