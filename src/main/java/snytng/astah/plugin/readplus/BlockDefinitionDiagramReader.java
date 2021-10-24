@@ -118,8 +118,14 @@ public class BlockDefinitionDiagramReader {
 				// ブロック
 				if(p.getModel() instanceof IBlock) {
 					IBlock b = (IBlock)p.getModel();
-					mps.add(View.getViewString("BlockDefinitionDiagramReader.block.header") + BlockReader.printAttributes(b), p);
-					mps.add(View.getViewString("BlockDefinitionDiagramReader.block.attributes.header") + BlockReader.printAttributes(b), p);
+					mps.add(String.format(
+							View.getViewString("BlockDefinitionDiagramReader.block.message"),
+							BlockReader.printName(b)),
+							p);
+					mps.add(String.format(
+							View.getViewString("BlockDefinitionDiagramReader.block.attributes.message"),
+							BlockReader.printAttributes(b)),
+							p);
 					// クラスに繋がる関連を読み上げ
 					List<IElement> elements = BlockReader.getRelations(b);
 					try {
@@ -128,7 +134,10 @@ public class BlockDefinitionDiagramReader {
 							if(elements.contains(e)){
 								String r = RelationReader.printRelation(e);
 								if(r != null){
-									mps.add(View.getViewString("BlockDefinitionDiagramReader.block.relations.header") + r, dp);
+									mps.add(String.format(
+											View.getViewString("BlockDefinitionDiagramReader.block.relations.message"),
+											r),
+											dp);
 								}
 							}
 						}
@@ -140,7 +149,10 @@ public class BlockDefinitionDiagramReader {
 				else if(RelationReader.isSupportedRelation(p.getModel())) {
 					String r = RelationReader.printRelation(p.getModel());
 					if(r != null){
-						mps.add(View.getViewString("BlockDefinitionDiagramReader.relation.header") + r, p);
+						mps.add(String.format(
+								View.getViewString("BlockDefinitionDiagramReader.relation.message"),
+								r),
+								p);
 					}
 				}
 				// それ以外
