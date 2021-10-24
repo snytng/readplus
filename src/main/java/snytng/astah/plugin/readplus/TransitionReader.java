@@ -7,13 +7,13 @@ import com.change_vision.jude.api.inf.model.ITransition;
 import com.change_vision.jude.api.inf.model.IVertex;
 
 public class TransitionReader {
-	
+
 	private TransitionReader(){}
 
 	public static boolean isSupportedTransition(IElement e){
 		if(e == null) return false;
 
-		return 
+		return
 				(e instanceof ITransition);
 	}
 
@@ -25,12 +25,12 @@ public class TransitionReader {
 		String source       = sourceState.getName();
 		IVertex targetState = iTransition.getTarget();
 		String target       = targetState.getName();
-		
+
 		String event = iTransition.getEvent();
 		String action = iTransition.getAction();
 		String guard = iTransition.getGuard();
 		String doActivity = null;
-		
+
 		if(iTransition.getSource() instanceof IState){
 			doActivity = ((IState)iTransition.getSource()).getDoActivity();
 		}
@@ -42,41 +42,63 @@ public class TransitionReader {
 				IPseudostate initialState = (IPseudostate)sourceState;
 				// 状態遷移図の疑似開始状態の場合
 				if(initialState.getContainer() == null){
-					message += "状態マシンが起動";			
-				} 
+					message += View.getViewString("TransitionReader.fromInitialStateOfDiagram");
+				}
 				// ある状態の疑似開始状態の場合
 				else {
-					message += initialState.getContainer() + "状態が開始";
+					message += String.format(
+							View.getViewString("TransitionReader.fromInitialStateOfState"),
+							initialState.getContainer());
+
 				}
 			}
 			// 疑似開始状態以外の場合
 			else {
-				message += "「" + source + "」状態に到達";			
+				message += String.format(
+						View.getViewString("TransitionReader.fromPseudoState"),
+						source);
+
 			}
 		}
 		//元状態が疑似状態以外の場合
 		else {
-			message += "「" + source + "」状態で、";
 			if(doActivity != null && ! doActivity.equals("")){
-				message += "「" + doActivity + "」を実行中の時に、";
+				message += String.format(
+						View.getViewString("TransitionReader.fromStateWhileDoing"),
+						source, doActivity);
+			} else {
+				message += String.format(
+						View.getViewString("TransitionReader.fromState"),
+						source);
+
 			}
 
 			if(event != null && ! event.equals("")){
-				message += "「" + event + "」イベントが発生";
+				message += String.format(
+						View.getViewString("TransitionReader.event"),
+						event);
 			} else {
-				message += "ヌルイベントが発生";
+				message += View.getViewString("TransitionReader.nullEvent");
 			}
 		}
-		
+
 		if(guard != null && ! guard.equals("")){
-			message += "して、「" + guard + "」という条件を満たすならば、"; 
+			message += String.format(
+					View.getViewString("TransitionReader.transitionWithGuard"),
+					guard);
 		} else {
-			message += "したら、";
+			message += View.getViewString("TransitionReader.transitionWithoutGuard");
 		}
+
 		if(action != null && ! action.equals("")){
-			message += "「" + action + "」を実行して、";
+			message += String.format(
+					View.getViewString("TransitionReader.toStateWithactionOfTransition"),
+					action, target);
+		} else {
+			message += String.format(
+					View.getViewString("TransitionReader.toState"),
+					target);
 		}
-		message += "「" + target + "」状態に遷移する。";
 
 		return message;
 	}
