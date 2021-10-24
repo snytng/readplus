@@ -59,14 +59,23 @@ ListSelectionListener
 	 * プロパティファイルの配置場所
 	 */
 	private static final String VIEW_PROPERTIES = View.class.getPackage().getName() + ".view";
+	private static final String VIEW_UML_PROPERTIES = View.class.getPackage().getName() + ".view_uml";
+	private static final String VIEW_SYSML_PROPERTIES = View.class.getPackage().getName() + ".view_sysml";
 
 	/**
 	 * リソースバンドル
 	 */
 	private static final ResourceBundle VIEW_BUNDLE = ResourceBundle.getBundle(VIEW_PROPERTIES, Locale.getDefault());
+	private static final ResourceBundle VIEW_UML_BUNDLE = ResourceBundle.getBundle(VIEW_UML_PROPERTIES, Locale.getDefault());
+	private static final ResourceBundle VIEW_SYSML_BUNDLE = ResourceBundle.getBundle(VIEW_SYSML_PROPERTIES, Locale.getDefault());
+
 	public static final String getViewString(String key) {
 		if (VIEW_BUNDLE.containsKey(key)) {
 			return VIEW_BUNDLE.getString(key);
+		} else if (VIEW_UML_BUNDLE.containsKey(key)) {
+			return VIEW_UML_BUNDLE.getString(key);
+		} else if (VIEW_SYSML_BUNDLE.containsKey(key)) {
+			return VIEW_SYSML_BUNDLE.getString(key);
 		} else {
 			return String.format("<%s>", key);
 		}

@@ -28,7 +28,7 @@ public class CommunicationDiagramReader {
 	public CommunicationDiagramReader(ICommunicationDiagram diagram) {
 		this.diagram = diagram;
 	}
-	
+
 	/**
 	 * コミュニケーション図に含まれるライフライン数を取得する
 	 * @return ライフライン数
@@ -37,7 +37,7 @@ public class CommunicationDiagramReader {
 		IInteraction interaction = diagram.getInteraction();
 		return interaction == null ? 0 : interaction.getLifelines().length;
 	}
-	
+
 	/**
 	 * コミュニケーション図に含まれるメッセージ数を取得する
 	 * @return メッセージ数
@@ -65,9 +65,13 @@ public class CommunicationDiagramReader {
 			if(m.getSource() instanceof ILifeline){
 				s = (ILifeline)m.getSource();
 				if(s.getBase() != null){
-					source = "「" + s.getName() + ":" + s.getBase().getName() + "」";
+					source = String.format(
+							View.getViewString("CommunicationDiagramReader.Lifeline.nameWithClass"),
+							s.getName(), s.getBase().getName());
 				} else {
-					source = "「" + s.getName() + ":" + "」";						
+					source = String.format(
+							View.getViewString("CommunicationDiagramReader.Lifeline.nameWithoutClass"),
+							s.getName());
 				}
 			}
 
@@ -77,9 +81,13 @@ public class CommunicationDiagramReader {
 			if(m.getTarget() instanceof ILifeline){
 				t = (ILifeline)m.getTarget();
 				if(t.getBase() != null){
-					target = "「" + t.getName() + ":" + t.getBase().getName() + "」";
+					target = String.format(
+							View.getViewString("CommunicationDiagramReader.Lifeline.nameWithClass"),
+							t.getName(), t.getBase().getName());
 				} else {
-					target = "「" + t.getName() + ":" + "」";
+					target = String.format(
+							View.getViewString("CommunicationDiagramReader.Lifeline.nameWithoutClass"),
+							t.getName());
 				}
 			}
 
@@ -88,15 +96,15 @@ public class CommunicationDiagramReader {
 
 			// メッセージパラメーター
 			String messageParameters = "(";
-			
+
 			// メッセージの引数があればそちらを優先し、なければ関数の引数を利用(astah*仕様)
 			if(! m.getArgument().equals("")){
 				messageParameters += m.getArgument();
-			} 
+			}
 			else
 				if(m.getOperation() != null){
 					IParameter[] params = m.getOperation().getParameters();
-					String paramstrings = 
+					String paramstrings =
 							Arrays.stream(params)
 							.map(IParameter::getName)
 							.collect(Collectors.joining(", "));
@@ -106,14 +114,19 @@ public class CommunicationDiagramReader {
 
 			// クラスに定義されたOperationになっているかどうかを表示
 			IOperation operation = m.getOperation();
-			String ox = operation != null ? "○" : "×"; 
+			String[] oxData = View.getViewString("CommunicationDiagramReaderoperation.ox").split(",");
+			String ox = operation != null ? oxData[0]: oxData[1];
 
 			// メッセージを読み上げ
-			message += indent + index + ": " + source + "は、" + target + "を(から)" + messageName + messageParameters + " " + ox;
-
+			String operationMessage = String.format(
+					View.getViewString("CommunicationDiagramReader.operation.message"),
+					source, target, messageName);
+			message += String.format(
+					"%s%s: %s%s %s",
+					indent, index, operationMessage, messageParameters, ox);
 		}
 
-		return message;		
+		return message;
 	}
 
 	private IPresentation[] sort(IPresentation[] presentations){
@@ -188,21 +201,27 @@ public class CommunicationDiagramReader {
 
 	public static MessagePresentation getMessagePresentation(ICommunicationDiagram diagram, IDiagramViewManager dvm) {
 		MessagePresentation mps = new MessagePresentation();
-	
+
 		CommunicationDiagramReader cdr = new CommunicationDiagramReader(diagram);
-	
-		// ライフライン数を表示する
-		mps.add("[" + diagram.getName() + "]コミュニケーション図には、"+
-				cdr.getNumberOfLifelines() + "個のライフラインと、" +
-				cdr.getNumberOfMessages() + "個のメッセージがあります",
+
+		// ライフライン数とメッセージ数を表示する
+		mps.add(String.format(
+				View.getViewString("CommunicationDiagramReader.diagram.message"),
+				diagram.getName(), cdr.getNumberOfLifelines(), cdr.getNumberOfMessages()
+				),
 				null);
-		
+
+
 		mps.add("=====", null);
 
 		// 選択要素の表示
 		IPresentation[] ps = dvm.getSelectedPresentations();
 		if(ps.length > 0){
-			mps.add("[" + diagram.getName() + "]コミュニケーション図で、" + ps.length + "個の要素が選択されています", null);
+			mps.add(String.format(
+					View.getViewString("CommunicationDiagramReader.selection.message"),
+					ps.length
+					),
+					null);
 
 			// 選択した要素をソートする
 			IPresentation[] sps = cdr.sort(ps);
@@ -217,8 +236,8 @@ public class CommunicationDiagramReader {
 			}
 
 		}
-		else 
-		{	
+		else
+		{
 			// 全てのコミュニケーション手順を表示する
 
 			// Presentationをソート

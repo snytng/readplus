@@ -65,9 +65,13 @@ public class SequenceDiagramReader {
 			if(m.getSource() instanceof ILifeline){
 				s = (ILifeline)m.getSource();
 				if(s.getBase() != null){
-					source = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithClass"), s.getName(), s.getBase().getName());
+					source = String.format(
+							View.getViewString("SequenceDiagramReader.Lifeline.nameWithClass"),
+							s.getName(), s.getBase().getName());
 				} else {
-					source = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithoutClass"), s.getName());
+					source = String.format(
+							View.getViewString("SequenceDiagramReader.Lifeline.nameWithoutClass"),
+							s.getName());
 				}
 			}
 
@@ -77,9 +81,13 @@ public class SequenceDiagramReader {
 			if(m.getTarget() instanceof ILifeline){
 				t = (ILifeline)m.getTarget();
 				if(t.getBase() != null){
-					target = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithClass"), t.getName(), t.getBase().getName());
+					target = String.format(
+							View.getViewString("SequenceDiagramReader.Lifeline.nameWithClass"),
+							t.getName(), t.getBase().getName());
 				} else {
-					target = String.format(View.getViewString("SequenceDiagramReader.Lifeline.nameWithoutClass"), t.getName());
+					target = String.format(
+							View.getViewString("SequenceDiagramReader.Lifeline.nameWithoutClass"),
+							t.getName());
 				}
 			}
 
@@ -198,23 +206,23 @@ public class SequenceDiagramReader {
 
 		SequenceDiagramReader sdr = new SequenceDiagramReader(diagram);
 
-		// ライフライン数を表示する
-		String diagramMessage = String.format(
+		// ライフライン数とを表示する
+		mps.add(String.format(
 				View.getViewString("SequenceDiagramReader.diagram.message"),
 				diagram.getName(), sdr.getNumberOfLifelines(), sdr.getNumberOfMessages()
-				);
-		mps.add(diagramMessage, null);
+				),
+				null);
 
 		mps.add("=====", null);
 
 		// 選択要素の表示
 		IPresentation[] ps = dvm.getSelectedPresentations();
 		if(ps.length > 0){
-			String selectionMessage = String.format(
+			mps.add(String.format(
 					View.getViewString("SequenceDiagramReader.selection.message"),
-					diagram.getName(), ps.length
-					);
-			mps.add(selectionMessage, null);
+					ps.length
+					),
+					null);
 
 			// 選択した要素をソートする
 			IPresentation[] sps = sdr.sort(ps);

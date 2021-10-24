@@ -57,7 +57,10 @@ public class ClassDiagramReader {
 		MessagePresentation mps = new MessagePresentation();
 
 		//パッケージ名を表示
-		mps.add("##### [パッケージ名: " + iPackage.getFullName(".")+"]", null);
+		mps.add(String.format(
+				View.getViewString("ClassDiagramReader.packageName.meessage"),
+				iPackage.getFullName(".")),
+				null);
 
 		// パッケージのダイアグラムを表示
 		IDiagram[] iDiagrams = iPackage.getDiagrams();
@@ -81,7 +84,7 @@ public class ClassDiagramReader {
 		return mps;
 	}
 
-	private static final int LIMIT_NUMBER_OF_CLASSES_IN_CLASS_DIAGRAM = 10;
+	private static final int LIMIT_NUMBER_OF_CLASSES = 10;
 
 	public static MessagePresentation getMessagePresentation(IClassDiagram diagram, IDiagramViewManager dvm) {
 		MessagePresentation mps = new MessagePresentation();
@@ -90,9 +93,15 @@ public class ClassDiagramReader {
 
 		// クラス数の表示
 		int noc = cdr.getNumberOfClasses();
-		mps.add("[" + diagram.getName() + "]クラス図には、「" + noc + "個」のクラスがあります", null);
-		if(noc >= LIMIT_NUMBER_OF_CLASSES_IN_CLASS_DIAGRAM){
-			mps.add("※警告: クラス数が" + LIMIT_NUMBER_OF_CLASSES_IN_CLASS_DIAGRAM + "以上です", null);
+		mps.add(String.format(
+				View.getViewString("ClassDiagramReader.numberOfClasses.meessage"),
+				diagram.getName(), noc),
+				null);
+		if(noc >= LIMIT_NUMBER_OF_CLASSES){
+			mps.add(String.format(
+					View.getViewString("ClassDiagramReader.warningNumberOfClasses.meessage"),
+					LIMIT_NUMBER_OF_CLASSES),
+					null);
 		}
 
 		mps.add("=====", null);
@@ -100,14 +109,23 @@ public class ClassDiagramReader {
 		// 選択要素の表示
 		IPresentation[] ps = dvm.getSelectedPresentations();
 		if(ps.length > 0){
-			mps.add("[" + diagram.getName() + "]クラス図で、" + ps.length + "個の要素が選択されています", null);
+			mps.add(String.format(
+					View.getViewString("ClassDiagramReader.selection.meessage"),
+					ps.length),
+					null);
 
 			for(IPresentation p : ps){
 				// クラス
 				if(p.getModel() instanceof IClass) {
 					IClass c = (IClass)p.getModel();
-					mps.add("クラス：" + ClassReader.printName(c), p);
-					mps.add("  属性：" + ClassReader.printAttributes(c), p);
+					mps.add(String.format(
+							View.getViewString("ClassDiagramReader.class.message"),
+							ClassReader.printName(c)),
+							p);
+					mps.add(String.format(
+							View.getViewString("ClassDiagramReader.class.attributes.message"),
+							ClassReader.printAttributes(c)),
+							p);
 					// クラスに繋がる関連を読み上げ
 					List<IElement> elements = ClassReader.getRelations(c);
 					try {
@@ -116,27 +134,33 @@ public class ClassDiagramReader {
 							if(elements.contains(e)){
 								String r = RelationReader.printRelation(e);
 								if(r != null){
-									mps.add("  関連：" + r, dp);
-								}							
+									mps.add(String.format(
+											View.getViewString("ClassDiagramReader.class.relations.message"),
+											r),
+											dp);
+								}
 							}
 						}
 					} catch (InvalidUsingException e) {
 						e.printStackTrace();
 					}
-				} 
+				}
 				// 関連
 				else if(RelationReader.isSupportedRelation(p.getModel())) {
 					String r = RelationReader.printRelation(p.getModel());
 					if(r != null){
-						mps.add("関連：" + r, p);
+						mps.add(String.format(
+								View.getViewString("ClassDiagramReader.relation.message"),
+								r),
+								p);
 					}
-				} 
+				}
 				// それ以外
 				else {
 					mps.add(p.getType(), p);
 				}
 			}
-		} 
+		}
 		// クラス図全体の読み上げ
 		else {
 			try {

@@ -10,7 +10,7 @@
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>readplus</artifactId>
-	<version>1.4.3.c.sysml</version>
+	<version>1.4.3.d.sysml</version>
 	<packaging>bundle</packaging>
 	<pluginRepositories>
 		<pluginRepository>
