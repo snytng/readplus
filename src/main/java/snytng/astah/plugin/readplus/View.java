@@ -27,7 +27,6 @@ import javax.swing.event.ListSelectionListener;
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.model.IActivityDiagram;
-import com.change_vision.jude.api.inf.model.IBlockDefinitionDiagram;
 import com.change_vision.jude.api.inf.model.IClassDiagram;
 import com.change_vision.jude.api.inf.model.ICommunicationDiagram;
 import com.change_vision.jude.api.inf.model.IDataFlowDiagram;
@@ -278,9 +277,9 @@ ListSelectionListener
 				messagePresentation = UseCaseDiagramReader.getMessagePresentation((IUseCaseDiagram)diagram, diagramViewManager);
 			}
 			// 選択している図がブロック定義図ならば、ブロックを読み上げ
-			else if(diagram instanceof IBlockDefinitionDiagram){
-				messagePresentation = BlockDefinitionDiagramReader.getMessagePresentation((IBlockDefinitionDiagram)diagram, diagramViewManager);
-			}
+//			else if(diagram instanceof IBlockDefinitionDiagram){
+//				messagePresentation = BlockDefinitionDiagramReader.getMessagePresentation((IBlockDefinitionDiagram)diagram, diagramViewManager);
+//			}
 			// 選択している図が要求図ならば、要求を読み上げ
 			else if(diagram instanceof IRequirementDiagram){
 				messagePresentation = RequirementDiagramReader.getMessagePresentation((IRequirementDiagram)diagram, diagramViewManager);
@@ -382,13 +381,13 @@ ListSelectionListener
 
 
 	private void setPresentationView(IPresentation p, Color c){
-		//try {
+		try {
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.BACKGROUND_COLOR, c);
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.BORDER_COLOR, c);
 			diagramViewManager.setViewProperty(p, IDiagramViewManager.LINE_COLOR, c);
-		//} catch(InvalidUsingException e){
-		//	e.printStackTrace();
-		//}
+		} catch(InvalidUsingException e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
