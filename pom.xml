@@ -6,11 +6,11 @@
 		<bundle.namespace>snytng.astah.plugin.readplus</bundle.namespace>
 		<plugin.install>true</plugin.install>
 		<astah.version>1.1</astah.version>
-		<astah.edition>sysml</astah.edition>
+		<astah.edition>pro</astah.edition>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>readplus</artifactId>
-	<version>1.4.3.d.sysml</version>
+	<version>1.5</version>
 	<packaging>bundle</packaging>
 	<pluginRepositories>
 		<pluginRepository>
@@ -294,4 +294,61 @@
 	<name>%bundle.name</name>
 	<description>%bundle.description</description>
 	<groupId>readplus</groupId>
+	<profiles>
+		<profile>
+			<id>astah-professional-windows</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<file>
+					<exists>C:/Program Files/astah-professional/astah-pro.jar</exists>
+				</file>
+			</activation>
+			<properties>
+				<astahPath>C:/Program Files/astah-professional</astahPath>
+				<astahEdition>professional</astahEdition>
+			</properties>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>local_astah_repository</id>
+					<name>Local Astah* Plugin Repository</name>
+					<url>file://${env.M2_HOME}/repository/</url>
+					<layout>default</layout>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+
+		<profile>
+			<id>astah-sysml-windows</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<file>
+					<exists>C:/Program Files/astah-sysml/astah-sys.jar</exists>
+				</file>
+			</activation>
+			<properties>
+				<astahPath>C:/Program Files/astah-sysml</astahPath>
+				<astahEdition>sysml</astahEdition>
+			</properties>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>local_astah_repository</id>
+					<name>Local Astah* Plugin Repository</name>
+					<url>file://${env.M2_HOME}/repository/</url>
+					<layout>default</layout>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
 </project>

@@ -51,8 +51,8 @@ public class AstahProjectReader {
 					)
 					, null);
 
-			// プロジェクトの中のブロック定義図の読み上げ
-			mps.addAll(BlockDefinitionDiagramReader.readDiagramInProject(dvm));
+			// プロジェクトの中のクラス図の読み上げ
+			mps.addAll(ClassDiagramReader.readClassDiagramInProject(dvm));
 
 
 		} catch (ProjectNotFoundException e) {
